@@ -2,7 +2,7 @@ import Section from "../../components/Section/Section";
 import { UlList } from "./AbstractPart.style";
 
 /* (1) 페이지 개요 설명 파트 */
-const AbstractPart = (refs) => {
+const AbstractPart = ({ refs }) => {
   return (
     <Section
       id="overview"

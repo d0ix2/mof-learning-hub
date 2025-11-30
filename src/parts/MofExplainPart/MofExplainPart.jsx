@@ -2,7 +2,7 @@ import Section from "../../components/Section/Section";
 import { InfoBox, OlList } from "./MofExplainPart.style";
 
 /* (2) MOF란 무엇인지 설명하는 파트 */
-const MofExplainPart = (refs) => {
+const MofExplainPart = ({ refs }) => {
   return (
     <Section
       id="mof-intro"

@@ -89,7 +89,7 @@ const ChatbotPart = (refs) => {
 
         if (userMessage.toLowerCase().includes("mof")) {
           resolve(
-            "MOF(금속-유기 골격체)는 금속 이온 클러스터와 유기 리간드가 배위 결합을 통해 형성하는 다공성 물질입니다. 기체 흡착 및 분리, 촉매 등 다양한 분야에 응용됩니다."
+            "MOF(금속-유기 골격체)는 금속 이온 클러스터와 유기 리간드가 배위 결합을 통해 형성하는 다공성 물질입니다. 기체 흡착 및 분리, 촉매 등 다양한 분야에 응용됩니다.",
           );
         } else if (
           AZURE_CHATBOT_ENDPOINT.includes("your-azure-chatbot-service")
@@ -97,7 +97,7 @@ const ChatbotPart = (refs) => {
           resolve(await callChatbotApi(userMessage));
         } else {
           resolve(
-            "문의하신 내용에 대한 챗봇의 답변입니다. (실제 Azure API 연동 필요)"
+            "문의하신 내용에 대한 챗봇의 답변입니다. (실제 Azure API 연동 필요)",
           );
         }
       });

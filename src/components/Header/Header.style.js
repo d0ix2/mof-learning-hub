@@ -5,7 +5,8 @@ export const HeaderWrapper = styled.header`
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -2px rgba(0, 0, 0, 0.1);
   background-color: white;
   border-bottom: 1px solid #e0e7ff; /* indigo-100 */

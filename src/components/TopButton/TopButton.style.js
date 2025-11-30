@@ -6,7 +6,8 @@ export const ScrollToTopButton = styled.button`
   right: 2rem;
   padding: 0.75rem;
   border-radius: 50%;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -4px rgba(0, 0, 0, 0.1);
   transition: opacity 0.3s;
   z-index: 50;

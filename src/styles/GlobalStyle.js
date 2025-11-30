@@ -14,7 +14,9 @@ export const GlobalStyle = createGlobalStyle`
     font-style: normal;
     font-family: ${({ theme }) => theme.font || "inherit"};
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background-color: ${(props) => props.theme.color.background};
 
   button {

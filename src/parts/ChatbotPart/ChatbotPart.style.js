@@ -113,7 +113,8 @@ export const ChatInput = styled.input`
   transition: all 0.15s;
 
   &:focus {
-    box-shadow: 0 0 0 2px white,
+    box-shadow:
+      0 0 0 2px white,
       0 0 0 4px ${(props) => props.theme.color.PRIMARY_COLOR};
     border-color: ${(props) => props.theme.color.PRIMARY_COLOR};
   }
@@ -129,7 +130,9 @@ export const SendButton = styled.button`
   border-radius: 0.75rem;
   font-weight: 600;
   transition: background-color 0.2s;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1),
+    0 1px 2px -1px rgba(0, 0, 0, 0.1);
 
   ${(props) =>
     props.disabled

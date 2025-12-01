@@ -2,7 +2,7 @@ import Section from "../../components/Section/Section";
 import { UlList } from "./AbstractPart.style";
 
 /* (1) 페이지 개요 설명 파트 */
-const AbstractPart = ({ refs }) => {
+function AbstractPart({ refs }) {
   return (
     <Section
       id="overview"
@@ -30,14 +30,9 @@ const AbstractPart = ({ refs }) => {
           챗봇 파트를 통해 MOF와 관련된 복잡한 질문에 대해 즉각적인 답변을 얻을
           수 있습니다.
         </li>
-        <li>
-          <span className="font-semibold">기술 스택:</span> React와 Tailwind
-          CSS로 프론트엔드를 구축하였으며, Netlify 배포 환경을 고려하여 단일
-          파일 및 환경 변수 기반 엔드포인트 숨김 방식을 채택하였습니다.
-        </li>
       </UlList>
     </Section>
   );
-};
+}
 
 export default AbstractPart;

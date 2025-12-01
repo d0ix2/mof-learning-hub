@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Bot, User } from "lucide-react";
 
 import Section from "../../components/Section/Section";
@@ -20,7 +20,7 @@ import {
 const AZURE_CHATBOT_ENDPOINT =
   "https://your-azure-chatbot-service.azurewebsites.net/api/chat";
 
-const ChatbotPart = ({ refs }) => {
+function ChatbotPart({ refs }) {
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -35,9 +35,9 @@ const ChatbotPart = ({ refs }) => {
   const isInitialMount = useRef(true);
 
   // 채팅 메시지 목록의 끝으로 자동 스크롤
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  // const scrollToBottom = () => {
+  //   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // };
 
   useEffect(() => {
     if (isInitialMount.current) {
@@ -94,22 +94,25 @@ const ChatbotPart = ({ refs }) => {
     setIsLoading(true);
 
     try {
-      const botResponseText = await new Promise(async (resolve) => {
-        await new Promise((r) => setTimeout(r, 1000));
-
-        if (userMessage.toLowerCase().includes("mof")) {
-          resolve(
-            "MOF(금속-유기 골격체)는 금속 이온 클러스터와 유기 리간드가 배위 결합을 통해 형성하는 다공성 물질입니다. 기체 흡착 및 분리, 촉매 등 다양한 분야에 응용됩니다."
-          );
-        } else if (
-          AZURE_CHATBOT_ENDPOINT.includes("your-azure-chatbot-service")
-        ) {
-          resolve(await callChatbotApi(userMessage));
-        } else {
-          resolve(
-            "문의하신 내용에 대한 챗봇의 답변입니다. (실제 Azure API 연동 필요)"
-          );
-        }
+      const botResponseText = await new Promise((resolve) => {
+        // async 제거
+        setTimeout(async () => {
+          // 비동기 로직을 setTimeout 내부에 넣거나 바로 실행
+          if (userMessage.toLowerCase().includes("mof")) {
+            resolve(
+              "MOF(금속-유기 골격체)는 금속 이온 클러스터와 유기 리간드가 배위 결합을 통해 형성하는 다공성 물질입니다. 기체 흡착 및 분리, 촉매 등 다양한 분야에 응용됩니다.",
+            );
+          } else if (
+            AZURE_CHATBOT_ENDPOINT.includes("your-azure-chatbot-service")
+          ) {
+            // await 키워드가 필요하므로 setTimeout 내부를 async로 만들고 resolve 호출
+            resolve(await callChatbotApi(userMessage));
+          } else {
+            resolve(
+              "문의하신 내용에 대한 챗봇의 답변입니다. (실제 Azure API 연동 필요)",
+            );
+          }
+        }, 1000);
       });
 
       const botMessage = {
@@ -199,6 +202,6 @@ const ChatbotPart = ({ refs }) => {
       </ChatContainer>
     </Section>
   );
-};
+}
 
 export default ChatbotPart;

@@ -2,7 +2,7 @@ import { Menu } from "lucide-react";
 
 import { HeaderWrapper, Logo, NavButton } from "./Header.style";
 
-const Header = ({ refs, scrollToSection }) => {
+export default function Header({ refs, scrollToSection }) {
   const handleScroll = (ref) => {
     scrollToSection(ref);
   };
@@ -51,6 +51,4 @@ const Header = ({ refs, scrollToSection }) => {
       </div>
     </HeaderWrapper>
   );
-};
-
-export default Header;
+}

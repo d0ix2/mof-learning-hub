@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Bot, User } from "lucide-react";
 
+import ExampleQuestions from "../../components/ExampleQuestions/ExampleQuestions";
 import Section from "../../components/Section/Section";
 import {
   ChatContainer,
@@ -15,10 +16,16 @@ import {
   LoaderIcon,
 } from "./ChatbotPart.style";
 
-// 임시 챗봇 API 엔드포인트
-// 배포 시 Netlify Build Settings에서 환경 변수를 설정 예정
 const AZURE_CHATBOT_ENDPOINT =
   "https://your-azure-chatbot-service.azurewebsites.net/api/chat";
+
+// 예시 질문 목록 정의
+const EXAMPLE_QUESTIONS = [
+  "MOF의 정의와 주요 응용 분야는 무엇인가요?",
+  "MOF 합성 방법 중 용매열 합성법에 대해 자세히 알려주세요.",
+  "MOF의 다공성 구조가 가지는 장점은 무엇인가요?",
+  "MOF 연구 동향과 미래 전망에 대해 설명해 주세요.",
+];
 
 function ChatbotPart({ refs }) {
   const [messages, setMessages] = useState([
@@ -35,10 +42,6 @@ function ChatbotPart({ refs }) {
   const isInitialMount = useRef(true);
 
   // 채팅 메시지 목록의 끝으로 자동 스크롤
-  // const scrollToBottom = () => {
-  //   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  // };
-
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
@@ -78,38 +81,38 @@ function ChatbotPart({ refs }) {
     }
   };
 
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (!input.trim() || isLoading) return;
+  // 메시지 전송 로직 (handleSendMessage에서 input 대신 직접 쿼리를 받도록 수정)
+  const sendMessage = async (userQuery) => {
+    if (!userQuery.trim() || isLoading) return;
 
-    const userMessage = input.trim();
     const newUserMessage = {
       id: Date.now(),
-      text: userMessage,
+      text: userQuery.trim(),
       sender: "user",
     };
 
     setMessages((prev) => [...prev, newUserMessage]);
-    setInput("");
+    setInput(""); // 입력창을 비워도 되도록 처리
     setIsLoading(true);
 
     try {
       const botResponseText = await new Promise((resolve) => {
-        // async 제거
         setTimeout(async () => {
-          // 비동기 로직을 setTimeout 내부에 넣거나 바로 실행
-          if (userMessage.toLowerCase().includes("mof")) {
+          if (userQuery.toLowerCase().includes("mof의 정의")) {
             resolve(
               "MOF(금속-유기 골격체)는 금속 이온 클러스터와 유기 리간드가 배위 결합을 통해 형성하는 다공성 물질입니다. 기체 흡착 및 분리, 촉매 등 다양한 분야에 응용됩니다.",
+            );
+          } else if (userQuery.toLowerCase().includes("합성 방법")) {
+            resolve(
+              "MOF의 일반적인 합성 방법에는 용매열 합성, 수열 합성, 마이크로파 합성 등이 있습니다. 용매열 합성이 가장 널리 사용되며, 특정 용매에서 금속 염과 유기 리간드를 가열하여 결정을 성장시키는 방식입니다.",
             );
           } else if (
             AZURE_CHATBOT_ENDPOINT.includes("your-azure-chatbot-service")
           ) {
-            // await 키워드가 필요하므로 setTimeout 내부를 async로 만들고 resolve 호출
-            resolve(await callChatbotApi(userMessage));
+            resolve(await callChatbotApi(userQuery));
           } else {
             resolve(
-              "문의하신 내용에 대한 챗봇의 답변입니다. (실제 Azure API 연동 필요)",
+              `[${userQuery}]에 대한 챗봇의 답변입니다. (실제 Azure API 연동 필요)`,
             );
           }
         }, 1000);
@@ -134,6 +137,17 @@ function ChatbotPart({ refs }) {
       setIsLoading(false);
       chatInputRef.current?.focus();
     }
+  };
+
+  // 일반 입력창 전송 핸들러
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    sendMessage(input);
+  };
+
+  // 예시 질문 클릭 핸들러
+  const handleExampleClick = (question) => {
+    sendMessage(question);
   };
 
   return (
@@ -182,6 +196,13 @@ function ChatbotPart({ refs }) {
           )}
           <div ref={messagesEndRef} />
         </ChatMessages>
+
+        {/* ⭐ 예시 질문 버튼 영역 추가 ⭐ */}
+        <ExampleQuestions
+          questions={EXAMPLE_QUESTIONS}
+          onSelect={handleExampleClick}
+          isLoading={isLoading}
+        />
 
         {/* 입력 폼 */}
         <InputForm onSubmit={handleSendMessage}>

@@ -37,17 +37,6 @@ export default function Header({ refs, scrollToSection }) {
             챗봇에게 질문
           </NavButton>
         </nav>
-        {/* 모바일 메뉴 (간단히 처리) */}
-        <div className="md:hidden">
-          <Menu
-            style={{
-              width: "1.5rem",
-              height: "1.5rem",
-              color: "#4F46E5", // 컴포넌트 분리 필요
-              cursor: "pointer",
-            }}
-          />
-        </div>
       </div>
     </HeaderWrapper>
   );

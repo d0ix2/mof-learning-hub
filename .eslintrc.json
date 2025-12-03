@@ -33,6 +33,7 @@
     "react/function-component-definition": "off",
     "no-shadow": "off",
     "react/no-unescaped-entities": "off",
-    "no-console": "off"
+    "no-console": "off",
+    "react/no-array-index-key": "off"
   }
 }

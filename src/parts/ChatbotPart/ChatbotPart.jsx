@@ -1,8 +1,14 @@
 import { useState, useEffect, useRef } from "react";
+
+import ReactMarkdown from "react-markdown";
+
 import { Bot, User } from "lucide-react";
 
 import ExampleQuestions from "../../components/ExampleQuestions/ExampleQuestions";
 import Section from "../../components/Section/Section";
+
+import { getAzureChatbotResponse } from "../../api/getAzureChatbotResponse";
+
 import {
   ChatContainer,
   ChatMessages,
@@ -16,13 +22,10 @@ import {
   LoaderIcon,
 } from "./ChatbotPart.style";
 
-const AZURE_CHATBOT_ENDPOINT =
-  "https://your-azure-chatbot-service.azurewebsites.net/api/chat";
-
 // 예시 질문 목록 정의
 const EXAMPLE_QUESTIONS = [
   "MOF의 정의와 주요 응용 분야는 무엇인가요?",
-  "MOF 합성 방법 중 용매열 합성법에 대해 자세히 알려주세요.",
+  "MOF 합성 방법 중 용매열 합성법에 대해 알려 주세요.",
   "MOF의 다공성 구조가 가지는 장점은 무엇인가요?",
   "MOF 연구 동향과 미래 전망에 대해 설명해 주세요.",
 ];
@@ -53,35 +56,10 @@ function ChatbotPart({ refs }) {
     }
   }, [messages]);
 
-  // 챗봇 API 호출 (변경 없음, 시뮬레이션 유지)
-  const callChatbotApi = async (userQuery) => {
-    if (AZURE_CHATBOT_ENDPOINT.includes("your-azure-chatbot-service")) {
-      return "죄송합니다. 현재 챗봇 엔드포인트가 설정되지 않았거나 유효하지 않습니다. 관리자에게 문의해주세요.";
-    }
+  // ⭐ 기존 callChatbotApi 함수는 제거되었습니다. ⭐
+  // 모든 API 통신은 외부 파일의 getAzureChatbotResponse 함수로 대체됩니다.
 
-    try {
-      const response = await fetch(AZURE_CHATBOT_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: userQuery }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`API 호출 실패: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return (
-        data.response ||
-        "챗봇 응답을 받지 못했습니다. 잠시 후 다시 시도해주세요."
-      );
-    } catch (error) {
-      console.error("챗봇 API 통신 오류:", error);
-      return `API 통신 중 오류가 발생했습니다: ${error.message}.`;
-    }
-  };
-
-  // 메시지 전송 로직 (handleSendMessage에서 input 대신 직접 쿼리를 받도록 수정)
+  // 메시지 전송 로직
   const sendMessage = async (userQuery) => {
     if (!userQuery.trim() || isLoading) return;
 
@@ -92,29 +70,21 @@ function ChatbotPart({ refs }) {
     };
 
     setMessages((prev) => [...prev, newUserMessage]);
-    setInput(""); // 입력창을 비워도 되도록 처리
+    setInput("");
     setIsLoading(true);
 
     try {
       const botResponseText = await new Promise((resolve) => {
         setTimeout(async () => {
-          if (userQuery.toLowerCase().includes("mof의 정의")) {
-            resolve(
-              "MOF(금속-유기 골격체)는 금속 이온 클러스터와 유기 리간드가 배위 결합을 통해 형성하는 다공성 물질입니다. 기체 흡착 및 분리, 촉매 등 다양한 분야에 응용됩니다.",
-            );
-          } else if (userQuery.toLowerCase().includes("합성 방법")) {
-            resolve(
-              "MOF의 일반적인 합성 방법에는 용매열 합성, 수열 합성, 마이크로파 합성 등이 있습니다. 용매열 합성이 가장 널리 사용되며, 특정 용매에서 금속 염과 유기 리간드를 가열하여 결정을 성장시키는 방식입니다.",
-            );
-          } else if (
-            AZURE_CHATBOT_ENDPOINT.includes("your-azure-chatbot-service")
-          ) {
-            resolve(await callChatbotApi(userQuery));
-          } else {
-            resolve(
-              `[${userQuery}]에 대한 챗봇의 답변입니다. (실제 Azure API 연동 필요)`,
-            );
-          }
+          const endpoint = process.env.REACT_APP_AZURE_CHATBOT_ENDPOINT;
+          const apiKey = process.env.REACT_APP_AZURE_CHATBOT_API_KEY;
+
+          const apiResponse = await getAzureChatbotResponse(
+            userQuery,
+            endpoint,
+            apiKey,
+          );
+          resolve(apiResponse);
         }, 1000);
       });
 
@@ -167,7 +137,7 @@ function ChatbotPart({ refs }) {
                 </Avatar>
               )}
               <MessageBubble $sender={message.sender}>
-                <p>{message.text}</p>
+                <ReactMarkdown>{message.text}</ReactMarkdown>
               </MessageBubble>
               {message.sender === "user" && (
                 <Avatar $sender="user">
@@ -197,7 +167,7 @@ function ChatbotPart({ refs }) {
           <div ref={messagesEndRef} />
         </ChatMessages>
 
-        {/* ⭐ 예시 질문 버튼 영역 추가 ⭐ */}
+        {/* 예시 질문 버튼 영역 */}
         <ExampleQuestions
           questions={EXAMPLE_QUESTIONS}
           onSelect={handleExampleClick}

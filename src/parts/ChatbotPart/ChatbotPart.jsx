@@ -38,6 +38,7 @@ function ChatbotPart({ refs }) {
       sender: "bot",
     },
   ]);
+
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
@@ -55,9 +56,6 @@ function ChatbotPart({ refs }) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
-
-  // ⭐ 기존 callChatbotApi 함수는 제거되었습니다. ⭐
-  // 모든 API 통신은 외부 파일의 getAzureChatbotResponse 함수로 대체됩니다.
 
   // 메시지 전송 로직
   const sendMessage = async (userQuery) => {
@@ -109,15 +107,13 @@ function ChatbotPart({ refs }) {
     }
   };
 
-  // 일반 입력창 전송 핸들러
+  const handleExampleClick = (question) => {
+    sendMessage(question);
+  };
+
   const handleSendMessage = (e) => {
     e.preventDefault();
     sendMessage(input);
-  };
-
-  // 예시 질문 클릭 핸들러
-  const handleExampleClick = (question) => {
-    sendMessage(question);
   };
 
   return (
@@ -128,6 +124,7 @@ function ChatbotPart({ refs }) {
     >
       <ChatContainer>
         {/* 채팅 메시지 영역 */}
+
         <ChatMessages>
           {messages.map((message) => (
             <MessageRow key={message.id} $sender={message.sender}>
@@ -185,6 +182,7 @@ function ChatbotPart({ refs }) {
               placeholder="MOF에 대해 궁금한 점을 입력하세요..."
               disabled={isLoading}
             />
+
             <SendButton type="submit" disabled={isLoading}>
               보내기
             </SendButton>

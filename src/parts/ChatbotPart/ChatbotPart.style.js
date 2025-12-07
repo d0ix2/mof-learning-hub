@@ -10,6 +10,8 @@ export const spin = keyframes`
 export const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 720px;
   height: 70vh;
   min-height: 500px;
   background-color: white;
@@ -17,6 +19,7 @@ export const ChatContainer = styled.div`
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   border: 1px solid #e5e7eb;
   overflow: hidden;
+  margin: 0 auto;
 `;
 
 export const ChatMessages = styled.div`

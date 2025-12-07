@@ -10,6 +10,9 @@ export const GlobalStyle = createGlobalStyle`
 }
 
   body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
     font-optical-sizing: auto;
     font-style: normal;
     font-family: ${({ theme }) => theme.font || "inherit"};

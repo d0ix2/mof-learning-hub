@@ -1,7 +1,9 @@
 import styled from "styled-components";
 
 export const SectionWrapper = styled.section`
-  padding: 5rem 1rem; /* py-20 px-4 */
+  padding: 5rem 0; /* py-20 px-4 */
+  margin: 0 2.5rem;
+
   @media (min-width: 768px) {
     padding: 6rem 2rem; /* md:py-24 sm:px-8 */
   }

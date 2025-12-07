@@ -4,7 +4,7 @@ export const LevelContainer = styled.div`
   display: flex;
   justify-content: center;
   gap: 15px;
-  margin-bottom: 20px;
+  margin: 2rem 0;
   padding: 20px;
   border-radius: 30px;
 `;

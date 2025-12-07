@@ -13,6 +13,7 @@ export default function Header({ refs, scrollToSection }) {
         style={{
           width: "100%",
           fontFamily: "DungGeunMo",
+          letterSpacing: "-0.5px",
           margin: "0 auto",
           display: "flex",
           justifyContent: "space-between",

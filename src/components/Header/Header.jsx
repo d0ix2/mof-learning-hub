@@ -36,7 +36,7 @@ export default function Header({ refs, scrollToSection }) {
             MOF란?
           </NavButton>
           <NavButton onClick={() => handleScroll(refs.chatbotRef)}>
-            챗봇에게 질문
+            Moffy
           </NavButton>
         </nav>
       </div>

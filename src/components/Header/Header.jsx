@@ -11,7 +11,8 @@ export default function Header({ refs, scrollToSection }) {
     <HeaderWrapper>
       <div
         style={{
-          maxWidth: "64rem",
+          width: "100%",
+          fontFamily: "DungGeunMo",
           margin: "0 auto",
           display: "flex",
           justifyContent: "space-between",

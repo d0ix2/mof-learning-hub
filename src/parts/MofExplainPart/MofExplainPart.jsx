@@ -1,12 +1,17 @@
 import Section from "../../components/Section/Section";
-import { InfoBox, OlList } from "./MofExplainPart.style";
+import {
+  InfoBox,
+  OlList,
+  RotatingImage,
+  RotatingImageContainer,
+} from "./MofExplainPart.style";
 
 /* (2) MOF란 무엇인지 설명하는 파트 */
 function MofExplainPart({ refs }) {
   return (
     <Section
       id="mof-intro"
-      title="2. MOF (금속-유기 골격체) 소개"
+      title="MOF(금속-유기 골격체)란 무엇인가요?"
       ref={refs.mofIntroRef}
     >
       <div
@@ -16,6 +21,22 @@ function MofExplainPart({ refs }) {
           gap: "1.5rem",
         }}
       >
+        <RotatingImageContainer>
+          <RotatingImage
+            src="/img/mof-ion.png"
+            alt="MOF Structure Illustration"
+          />
+          <RotatingImage
+            src="/img/mof-linker.png"
+            alt="MOF Structure Illustration"
+          />
+          <RotatingImage
+            src="/img/mof-structure.png"
+            alt="MOF Structure Illustration"
+            style={{ width: "500px", height: "500px" }}
+          />
+        </RotatingImageContainer>
+
         <p style={{ fontSize: "1.125rem", lineHeight: "1.625" }}>
           MOF는 다공성 물질의 한 종류로, '금속 이온 클러스터(Metal Ion
           Clusters)'와 이들을 연결하는 '유기 리간드(Organic Linkers)'의 반복적인

@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import { Bot, User } from "lucide-react";
 
 import ExampleQuestions from "../../components/ExampleQuestions/ExampleQuestions";
+import LevelSelector from "../../components/LevelSelector/LevelSelector";
 import Section from "../../components/Section/Section";
 
 import { getAzureChatbotResponse } from "../../api/getAzureChatbotResponse";
@@ -30,11 +31,28 @@ const EXAMPLE_QUESTIONS = [
   "MOF 연구 동향과 미래 전망에 대해 설명해 주세요.",
 ];
 
+const SYSTEM_PROMPTS = {
+  // 금속 중심과 유기 연결체를 비유로 설명하는 초급 레벨
+  MIDDLE_HIGH: {
+    key: "MIDDLE_HIGH",
+    label: "중~고등학생",
+    prompt:
+      "당신은 MOF에 대한 기초 학습을 돕는 친절한 AI 도우미입니다. 답변은 **고등학교 화학Ⅰ, Ⅱ 수준** 용어로 설명하고, MOF의 **금속 중심**은 '레고 블록'이나 '뼈대'로, **유기 연결체**는 '연결 고리'로 비유하여 **친근하고 쉽게** 설명하세요. 모든 답변에 MOF 개념을 포함해야 합니다. 항상 학습자를 독려하는 친근한 어조를 유지하세요.",
+  },
+  // 배위 화학, SBU 등 전공 용어를 사용하는 심화 레벨
+  UNIVERSITY: {
+    key: "UNIVERSITY",
+    label: "학부생 이상",
+    prompt:
+      "당신은 MOF 학습을 돕는 전문가 AI 도우미입니다. 답변은 **배위 화학, 결정학, 표면적, 다공성, SBU** 등 **전공 수준**의 용어와 개념을 사용하여 명확하고 간결하게 설명하세요. MOF의 구조적 특징, 합성과 관련된 중요 변수, 응용 분야(가스 저장, 촉매, 분리 등) 중 하나 이상을 반드시 연결하여 설명하세요. 친근하면서도 전문가의 신뢰감을 줄 수 있는 어조를 유지하세요.",
+  },
+};
+
 function ChatbotPart({ refs }) {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "안녕하세요! 저는 MOF 학습 도우미 챗봇입니다. MOF에 대해 궁금한 점을 질문해 주세요.",
+      text: "안녕하세요! 저는 MOF 학습 도우미 **Moffy**라고 해요. 학습자님의 레벨을 선택하신 후, MOF에 대해 궁금한 점을 자유롭게 질문해 주세요.",
       sender: "bot",
     },
   ]);
@@ -44,6 +62,9 @@ function ChatbotPart({ refs }) {
   const messagesEndRef = useRef(null);
   const chatInputRef = useRef(null);
   const isInitialMount = useRef(true);
+  const [selectedLevel, setSelectedLevel] = useState(
+    SYSTEM_PROMPTS.UNIVERSITY.key,
+  );
 
   // 채팅 메시지 목록의 끝으로 자동 스크롤
   useEffect(() => {
@@ -60,6 +81,8 @@ function ChatbotPart({ refs }) {
   // 메시지 전송 로직
   const sendMessage = async (userQuery) => {
     if (!userQuery.trim() || isLoading) return;
+
+    const currentSystemPrompt = SYSTEM_PROMPTS[selectedLevel].prompt;
 
     const newUserMessage = {
       id: Date.now(),
@@ -81,6 +104,7 @@ function ChatbotPart({ refs }) {
             userQuery,
             endpoint,
             apiKey,
+            currentSystemPrompt,
           );
           resolve(apiResponse);
         }, 1000);
@@ -116,12 +140,36 @@ function ChatbotPart({ refs }) {
     sendMessage(input);
   };
 
+  const handleLevelChange = (levelKey) => {
+    setSelectedLevel(levelKey);
+    // 레벨 변경 시, 사용자에게 현재 레벨을 안내하는 메시지를 추가 (선택적)
+    setMessages([
+      {
+        id: Date.now(),
+        text: `학습자님의 레벨이 ${SYSTEM_PROMPTS[levelKey].label}으로 설정되었어요. 이제 자유롭게 MOF에 대해 질문해 보세요!`,
+        sender: "bot",
+      },
+    ]);
+  };
+
   return (
     <Section
       id="chatbot"
-      title="3. MOF 챗봇에게 질문하기"
+      title="MOF 학습 도우미 Moffy에게 질문하기"
       ref={refs.chatbotRef}
     >
+      <p style={{ fontSize: "1.125rem", lineHeight: "1.625" }}>
+        먼저 학습자님의 수준에 맞는 레벨을 선택한 후, MOF에 대해 궁금한 점을
+        자유롭게 질문해 주세요. Moffy가 친절하고 자세하게 답변해 드릴 거예요!
+      </p>
+
+      <LevelSelector
+        selectedLevel={selectedLevel}
+        onLevelChange={handleLevelChange}
+        isLoading={isLoading}
+        systemPrompt={SYSTEM_PROMPTS}
+      />
+
       <ChatContainer>
         {/* 채팅 메시지 영역 */}
 

@@ -1,12 +1,13 @@
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import TopButton from "../../components/TopButton/TopButton";
+import Logo from "../../components/Logo/Logo";
 
 import AbstractPart from "../../parts/AbstractPart/AbstractPart";
 import MofExplainPart from "../../parts/MofExplainPart/MofExplainPart";
 import ChatbotPart from "../../parts/ChatbotPart/ChatbotPart";
 
-import { Container } from "./MainPage.style";
+import { Container, LogoImage } from "./MainPage.style";
 
 import useScrollToSection from "../../hooks/useScrollToSection";
 
@@ -16,6 +17,8 @@ const MainPage = () => {
   return (
     <Container>
       <Header refs={refs} scrollToSection={scrollToSection} />
+
+      <LogoImage src="/img/logo.png" alt="MOF Learning Hub Logo" />
 
       {/* (1) 페이지 개요 설명 파트 */}
       <AbstractPart refs={refs} />

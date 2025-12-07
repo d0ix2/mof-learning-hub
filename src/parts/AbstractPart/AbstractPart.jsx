@@ -4,11 +4,7 @@ import { UlList } from "./AbstractPart.style";
 /* (1) 페이지 개요 설명 파트 */
 function AbstractPart({ refs }) {
   return (
-    <Section
-      id="overview"
-      title="1. MOF 학습 도우미 개요"
-      ref={refs.overviewRef}
-    >
+    <Section id="overview" title="MOF Learning Hub?" ref={refs.overviewRef}>
       <p
         style={{
           fontSize: "1.125rem",
